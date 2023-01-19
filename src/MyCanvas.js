@@ -26,3 +26,4 @@ const Rectangle = () => {
 };
 
 export {MyCanvas}
+  
