@@ -14,7 +14,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: #263650;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -32,7 +32,7 @@ div {
 }
 
 ul li {
-  
+  text-align: left;
   justify-content: left;
 }
 
@@ -44,7 +44,7 @@ input:invalid + span::after {
 
 input:valid + span::after {
   content: "✓";
-  color: green;
+  color: rgb(6, 207, 6);
   padding-left: 5px;
 }
 
