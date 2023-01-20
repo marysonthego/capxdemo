@@ -1,6 +1,14 @@
 import { createRef, forwardRef, useEffect, useRef, useState } from "react";
 
-const MyCanvas = forwardRef(function MyCanvas({width, height}, ref) {
+const MyCanvas = forwardRef(function MyCanvas({width, height, shapes}, ref) {
+
+  useEffect(() => {
+    if (ref.current) {
+      const ctx = ref.current.getContext("2d");
+      ctx.strokeRect(200, 200, 40, 50);
+    }
+  });
+
 
   return (
     <>
@@ -22,8 +30,6 @@ const Rectangle = () => {
       ctx.strokeRect(200, 200, 40, 50);
     }
   }, [ref]);
-
 };
 
 export {MyCanvas}
-  

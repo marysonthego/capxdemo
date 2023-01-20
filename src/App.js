@@ -1,23 +1,55 @@
+// import { useState } from 'react';
+
+// let nextId = 0;
+
+// export default function List() {
+//   const [name, setName] = useState('');
+//   const [artists, setArtists] = useState([]);
+
+//   return (
+//     <>
+//       <h1>Inspiring sculptors:</h1>
+//       <input
+//         value={name}
+//         onChange={e => setName(e.target.value)}
+//       />
+//       <button onClick={() => {
+//         setName('');
+//         setArtists([
+//           ...artists,
+//           { id: nextId++, name: name }
+//         ]);
+//       }}>Add</button>
+//       <ul>
+//         {artists.map(artist => (
+//           <li key={artist.id}>{artist.name}</li>
+//         ))}
+//       </ul>
+//     </>
+//   );
+// }
+
 import { createRef, forwardRef, useEffect, useRef, useState } from "react";
-import { MyCanvas } from "./MyCanvas";
+//import { MyCanvas } from "./MyCanvas";
 import "./App.css";
 
 function App() {
   const [total, setTotal] = useState(0);
+  const [shapes, setShapes] = useState([]);
+  const ref = useRef(null);
+  const newShapes = [];
 
   const handleInput = (e) => {
     e.preventDefault();
-    const shapes = createShapes(total);
-    console.log(`app shapes:`, shapes);
+    createShapes();
   };
 
-  const createShapes = (total) => {
-    const shapes = [];
-    console.log(`Total=`, total);
+  const createShapes = () => {
+    console.log(`createShapes Total=`, total);
 
     for (let i = 0; i < total; i++) {
       let x = getRandomIntInclusive(0, 800);
-      console.log(`random x =`, x);
+      console.log(`createShapes random x =`, x);
 
       let y = getRandomIntInclusive(0, 800);
       console.log(`random y =`, y);
@@ -49,41 +81,91 @@ function App() {
       let myColor = "#".concat(r, g, b);
       console.log(`mycolor=`, myColor);
 
-      let shapeObj = { x, y, size, type, myColor };
-      console.log(`shapeObj=`, JSON.stringify(shapeObj));
-
-      shapes.push(shapeObj);
+      const shapeObj = { x, y, size, type, myColor };
+      console.log(`createShapes shapeObj=`, JSON.stringify(shapeObj));
+      newShapes.push(shapeObj);
+      console.log(`createShapes newShapes:`, newShapes);
+      setShapes(
+        shapes => [...shapes, shapeObj],
+        );
     }
-    console.log(shapes);
 
     function getRandomIntInclusive(min, max) {
       min = Math.ceil(min);
       max = Math.floor(max);
       return Math.floor(Math.random() * (max - min + 1) + min); // The maximum is inclusive and the minimum is inclusive
     }
-    return shapes;
   };
+
+  const MyCanvas = forwardRef(function MyCanvas({width, height, shapes}, ref) {
+
+    useEffect(() => {
+      if (ref.current) {
+        const ctx = ref.current.getContext("2d");
+        ctx.strokeRect(200, 200, 40, 50);
+      }
+    });
+
+    return (
+      <>
+      <canvas
+        ref={ref}
+        width="600"
+        height="600"
+        style={{ border: "2px solid black" }}
+      />
+      </>
+    );
+  });
+
+  const Rectangle = () => {
+    const ref = useRef(HTMLCanvasElement);
+    useEffect(() => {
+      if (ref.current) {
+        const ctx = ref.current.getContext("2d");
+        ctx.strokeRect(200, 200, 40, 50);
+      }
+    }, [ref]);
+  };
+
   return (
     <div className="App">
       <header className="App-header">
-        <form onSubmit={handleInput}>
+        <span>
           <label>How many shapes would you like to display? {"  "}</label>
           <input
-            id="userInput"
-            name="userInput"
             type="number"
             min="0"
             max="500"
             required
             value={total}
-            onChange={(e) => setTotal(e.currentTarget.value)}
+            onChange={e => setTotal(e.target.value)}
           />
           <span className="validity"></span>
-          <div>
-            <input type="submit" />
-          </div>
-        </form>
+          <>
+            <button onClick={(e) => {
+              handleInput(e); }} >
+              Submit
+            </button>
+          </>
+          </span>
       </header>
+      <div>
+      <ul>
+
+          <li>{newShapes}</li>
+        {
+        shapes.map(({x, y, size, type, myColor}) => (
+
+          <li key={x}>x= {x} y={y} size={size} type={type} color={myColor}</li>
+
+        ))
+        }
+      </ul>
+      </div>
+      <div>
+      <MyCanvas width="600" height="600" shapes={shapes} ref={ref}/>
+      </div>
     </div>
   );
 };
