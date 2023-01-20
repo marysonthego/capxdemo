@@ -1,43 +1,10 @@
-// import { useState } from 'react';
-
-// let nextId = 0;
-
-// export default function List() {
-//   const [name, setName] = useState('');
-//   const [artists, setArtists] = useState([]);
-
-//   return (
-//     <>
-//       <h1>Inspiring sculptors:</h1>
-//       <input
-//         value={name}
-//         onChange={e => setName(e.target.value)}
-//       />
-//       <button onClick={() => {
-//         setName('');
-//         setArtists([
-//           ...artists,
-//           { id: nextId++, name: name }
-//         ]);
-//       }}>Add</button>
-//       <ul>
-//         {artists.map(artist => (
-//           <li key={artist.id}>{artist.name}</li>
-//         ))}
-//       </ul>
-//     </>
-//   );
-// }
-
 import { createRef, forwardRef, useEffect, useRef, useState } from "react";
-//import { MyCanvas } from "./MyCanvas";
 import "./App.css";
 
 function App() {
   const [total, setTotal] = useState(0);
   const [shapes, setShapes] = useState([]);
   const ref = useRef(null);
-  const newShapes = [];
 
   const handleInput = (e) => {
     e.preventDefault();
@@ -45,46 +12,46 @@ function App() {
   };
 
   const createShapes = () => {
-    console.log(`createShapes Total=`, total);
+    //console.log(`createShapes Total=`, total);
 
     for (let i = 0; i < total; i++) {
+      let id = i;
       let x = getRandomIntInclusive(0, 800);
-      console.log(`createShapes random x =`, x);
+      //console.log(`createShapes random x =`, x);
 
       let y = getRandomIntInclusive(0, 800);
-      console.log(`random y =`, y);
+      //console.log(`random y =`, y);
 
       let size = getRandomIntInclusive(5, 15);
-      console.log(`random size =`, size);
+      //console.log(`random size =`, size);
 
       let type = getRandomIntInclusive(0, 2);
-      console.log(`random type =`, type);
+      //console.log(`random type =`, type);
 
       let r = getRandomIntInclusive(0, 255).toString(16).toUpperCase();
       if (r.length === 1) {
         r = "0".concat(r);
       }
-      console.log(`random color R =`, r);
+      //console.log(`random color R =`, r);
 
       let g = getRandomIntInclusive(0, 255).toString(16).toUpperCase();
       if (g.length === 1) {
         g = "0".concat(g);
       }
-      console.log(`random color g =`, g);
+      //console.log(`random color g =`, g);
 
       let b = getRandomIntInclusive(0, 255).toString(16).toUpperCase();
       if (b.length === 1) {
         b = "0".concat(b);
       }
-      console.log(`random color b =`, b);
+      //console.log(`random color b =`, b);
 
       let myColor = "#".concat(r, g, b);
-      console.log(`mycolor=`, myColor);
+      //let myColor = "".concat(r, g, b);
+      //console.log(`mycolor=`, myColor);
 
-      const shapeObj = { x, y, size, type, myColor };
-      console.log(`createShapes shapeObj=`, JSON.stringify(shapeObj));
-      newShapes.push(shapeObj);
-      console.log(`createShapes newShapes:`, newShapes);
+      const shapeObj = { id, x, y, size, type, myColor };
+      //console.log(`createShapes shapeObj=`, JSON.stringify(shapeObj));
       setShapes(
         shapes => [...shapes, shapeObj],
         );
@@ -102,9 +69,24 @@ function App() {
     useEffect(() => {
       if (ref.current) {
         const ctx = ref.current.getContext("2d");
+        shapes.forEach(el => {
+          switch (el.type) {
+            case '0':
+              console.log('case 0');
+              break;
+            case 1:
+              console.log('case 1');
+              break;
+            case 2:
+              console.log('case 2');
+              break;
+            default:
+            break;
+          }
+        });
         ctx.strokeRect(200, 200, 40, 50);
-      }
-    });
+      };
+    }, [ref]);
 
     return (
       <>
@@ -152,12 +134,10 @@ function App() {
       </header>
       <div>
       <ul>
-
-          <li>{newShapes}</li>
         {
-        shapes.map(({x, y, size, type, myColor}) => (
+        shapes.map(({id, x, y, size, type, myColor}) => (
 
-          <li key={x}>x= {x} y={y} size={size} type={type} color={myColor}</li>
+          <li key={id} color={myColor}>x={x} y={y} size={size} type={type} color={myColor}</li>
 
         ))
         }
