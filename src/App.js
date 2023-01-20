@@ -5,35 +5,32 @@ import {MyCanvas } from './MyCanvas';
 function App() {
   const [total, setTotal] = useState(0);
   const [shapes, setShapes] = useState([]);
+  const [transparency, setTransparency] = useState({
+    Square: true,
+    Circle: true,
+    Triangle: true
+  });
   const ref = useRef(null);
-  //const offRef = useRef(null);
   const reload = () => window.location.reload(true);
 
   const handleInput = (e) => {
     e.preventDefault();
     if(total > 0 && total < 501){
       createShapes();
-      //MyOffscreenCanvas({width:"800", height:"800", shapes:{shapes}, ref:{offRef}});
     }
   };
 
   const createShapes = () => {
-    console.log(`createShapes Total=`, total);
-
     for (let i = 0; i < total; i++) {
       let id = i;
       let shapeName = "Mary" + i;
       let x = getRandomIntInclusive(0, 800);
-      //console.log(`createShapes random x =`, x);
 
       let y = getRandomIntInclusive(0, 800);
-      //console.log(`random y =`, y);
 
       let size = getRandomFloat(5.0, 15.0);
-      //console.log(`random size =`, size);
 
       let type = getRandomIntInclusive(0, 2);
-      //console.log(`random type =`, type);
       let typeName;
       if (type === 0) typeName="Square";
       if (type === 1) typeName="Circle";
@@ -43,26 +40,25 @@ function App() {
       if (r.length === 1) {
         r = "0".concat(r);
       }
-      //console.log(`random color R =`, r);
 
       let g = getRandomIntInclusive(0, 255).toString(16).toUpperCase();
       if (g.length === 1) {
         g = "0".concat(g);
       }
-      //console.log(`random color g =`, g);
 
       let b = getRandomIntInclusive(0, 255).toString(16).toUpperCase();
       if (b.length === 1) {
         b = "0".concat(b);
       }
-      //console.log(`random color b =`, b);
 
-      let myColor = "#".concat(r, g, b);
-      //let myColor = "".concat(r, g, b);
-      //console.log(`mycolor=`, myColor);
+      let myColor;
+      if(transparency[typeName] === true) {
+        myColor = "#".concat(r,g,b,"80"); //50% transparency
+      } else {
+        myColor = "#".concat(r,g,b,"FF"); //Opaque
+      }
 
       const shapeObj = { shapeName, id, x, y, size, type, typeName, myColor };
-      console.log(`createShapes shapeObj=`, JSON.stringify(shapeObj));
       setShapes(
         shapes => [...shapes, shapeObj],
         );
@@ -108,6 +104,41 @@ function App() {
       <div>
       <MyCanvas width="600" height="600" shapes={shapes} ref={ref}/>
       </div>
+      <span>
+        Toggle Transparency of shapes! {"  "}
+        <button onClick={() => {
+          if(transparency.Square === true) {           setTransparency({
+            ...transparency, Square: false
+          });
+        } else {
+          setTransparency({
+            ...transparency, Square: true
+          });
+        }
+        }}> Squares </button>
+        {"  "}
+        <button onClick={(e) => {
+          if(transparency.Circle === true) {           setTransparency({
+            ...transparency, Circle: false
+          });
+        } else {
+          setTransparency({
+            ...transparency, Circle: true
+          });
+        }
+        }}> Circles </button>
+        {"  "}
+        <button onClick={(e) => {
+         if(transparency.Triangle === true) {           setTransparency({
+          ...transparency, Triangle: false
+        });
+        } else {
+          setTransparency({
+            ...transparency, Triangle: true
+          });
+        }
+        }}> Triangles </button>
+      </span>
     </div>
   );
 };
