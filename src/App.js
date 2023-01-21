@@ -7,7 +7,7 @@ import { MyCanvas } from "./MyCanvas";
 - assigns a random velocity field (dx, dy as a float in the range of -5px to 5px per second) to each object and a forward and backward button below the bordered region. Animate the representation (backward or forward) in 1 second increments when the button is clicked, and stop it when the button is unclicked, or the other button is clicked.
 See if Canvas Transforms can do this - https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Transformations
 Or, just use regular CSS Animations?
-- Ask what forward/backward mean? Zoom entire canvas in/out? 
+- What do forward/backward mean? Zoom canvas in/out?
 */
 
 function App() {
