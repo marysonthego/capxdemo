@@ -93,6 +93,44 @@ function App() {
     }
   };
 
+  const toggleTransparency = (e) => {
+    e.preventDefault();
+    const buttonName=e.target.name;
+    let transparentTemp;
+
+    if (transparency[buttonName] === true) {
+      setTransparency({
+        ...transparency,
+        [buttonName]: false,
+      });
+      transparentTemp = false;
+    } else {
+      setTransparency({
+        ...transparency,
+        [buttonName]: true,
+      });
+      transparentTemp = true;
+    };
+    const newShapes = shapes.map((s, i) => {
+      if(s.typeName === buttonName) {
+        let tempShape = {...s};
+        let first = tempShape.myColor.slice(0,7);
+        let last;
+        if (transparentTemp === true) {
+          last = "80";
+        } else {
+          last = "FF";
+        }
+        tempShape.myColor = first.concat(last);
+        console.log(`tempShape.myColor=`, tempShape.myColor);
+        return tempShape;
+      } else {
+        return s;
+      }
+    });
+    setShapes(newShapes);
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -125,57 +163,24 @@ function App() {
       {/* TODO replace with proper toggle handler. This is not DRY */}
       <span>
         Toggle Transparency of shapes! {"  "}
-        <button
-          onClick={() => {
-            if (transparency.Square === true) {
-              setTransparency({
-                ...transparency,
-                Square: false,
-              });
-            } else {
-              setTransparency({
-                ...transparency,
-                Square: true,
-              });
-            }
+        <button name="Square"
+          onClick={(e) => {toggleTransparency(e);
           }}
         >
           {" "}
           Squares{" "}
         </button>
         {"  "}
-        <button
-          onClick={(e) => {
-            if (transparency.Circle === true) {
-              setTransparency({
-                ...transparency,
-                Circle: false,
-              });
-            } else {
-              setTransparency({
-                ...transparency,
-                Circle: true,
-              });
-            }
+        <button name="Circle"
+          onClick={(e) => {toggleTransparency(e);
           }}
         >
           {" "}
           Circles{" "}
         </button>
         {"  "}
-        <button
-          onClick={(e) => {
-            if (transparency.Triangle === true) {
-              setTransparency({
-                ...transparency,
-                Triangle: false,
-              });
-            } else {
-              setTransparency({
-                ...transparency,
-                Triangle: true,
-              });
-            }
+        <button name="Triangle"
+          onClick={(e) => {toggleTransparency(e);
           }}
         >
           {" "}
