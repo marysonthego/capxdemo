@@ -3,7 +3,7 @@ import { forwardRef, useEffect } from "react";
 const MyCanvas = forwardRef(function MyCanvas({width, height, shapes}, ref) {
   console.table(shapes);
 
-  useEffect(() => {
+  useEffect(() => {  //Draw the shapes
    if (ref.current) {
     const ctx = ref.current.getContext("2d");
     let side = 0;
@@ -65,7 +65,11 @@ const MyCanvas = forwardRef(function MyCanvas({width, height, shapes}, ref) {
 });
 
 const MyOffscreenCanvas = forwardRef(function MyOffscreenCanvas({width, height, shapes}, ref) {
-  //todo
+  /* TODO
+  Investigate using offScreenCanvas to build 800x800 canvas, then display it in a visible 600x600 canvas.
+  Also good for optimizing redraws - https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Optimizing_canvas
+  */
+
 });
 
 export {MyCanvas, MyOffscreenCanvas}
