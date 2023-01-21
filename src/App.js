@@ -27,6 +27,7 @@ function App() {
   // submit button handler
   const handleInput = (e) => {
     e.preventDefault();
+    e.target.disabled = true;
     if (total > 0 && total < 501) {
       createShapes();
     }
@@ -53,7 +54,7 @@ function App() {
       if (type === 1) typeName = "Circle";
       if (type === 2) typeName = "Triangle";
 
-      // build random hex colors #RRGGBBAA
+      // build random hex colors #RRGGBB
       let r = getRandomIntInclusive(0, 255).toString(16).toUpperCase();
       if (r.length === 1) {
         r = "0".concat(r);
@@ -69,12 +70,7 @@ function App() {
         b = "0".concat(b);
       }
 
-      let myColor;
-      if (transparency[typeName] === true) {
-        myColor = "#".concat(r, g, b, "80"); //50% transparency
-      } else {
-        myColor = "#".concat(r, g, b, "FF"); //Opaque
-      }
+      let myColor = "#".concat(r, g, b);
 
       // Add shape to state
       const shapeObj = { shapeName, id, x, y, size, type, typeName, myColor };
@@ -96,39 +92,17 @@ function App() {
   const toggleTransparency = (e) => {
     e.preventDefault();
     const buttonName=e.target.name;
-    let transparentTemp;
-
     if (transparency[buttonName] === true) {
       setTransparency({
         ...transparency,
         [buttonName]: false,
       });
-      transparentTemp = false;
     } else {
       setTransparency({
         ...transparency,
         [buttonName]: true,
       });
-      transparentTemp = true;
     };
-    const newShapes = shapes.map((s, i) => {
-      if(s.typeName === buttonName) {
-        let tempShape = {...s};
-        let first = tempShape.myColor.slice(0,7);
-        let last;
-        if (transparentTemp === true) {
-          last = "80";
-        } else {
-          last = "FF";
-        }
-        tempShape.myColor = first.concat(last);
-        console.log(`tempShape.myColor=`, tempShape.myColor);
-        return tempShape;
-      } else {
-        return s;
-      }
-    });
-    setShapes(newShapes);
   }
 
   return (
@@ -145,7 +119,7 @@ function App() {
             onChange={(e) => setTotal(e.target.value)}
           />
           <span className="validity"></span>
-          <button
+          <button name="Submit"
             onClick={(e) => {
               handleInput(e);
             }}
@@ -158,9 +132,8 @@ function App() {
       </header>
       <div></div>
       <div>
-        <MyCanvas width="600" height="600" shapes={shapes} ref={ref} />
+        <MyCanvas width="800" height="800" shapes={shapes} transparency={transparency} ref={ref} />
       </div>
-      {/* TODO replace with proper toggle handler. This is not DRY */}
       <span>
         Toggle Transparency of shapes! {"  "}
         <button name="Square"
