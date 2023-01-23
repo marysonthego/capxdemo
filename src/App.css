@@ -3,9 +3,10 @@
 }
 
 
-#cw {
-  position: fixed;
-  z-index: -1;
+.canvas {
+  display: flex;
+  width: 650px;
+  height: 650px;
 }
 
 @media (prefers-reduced-motion: no-preference) {

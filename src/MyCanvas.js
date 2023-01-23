@@ -1,10 +1,7 @@
-import { forwardRef, useRef, useEffect, useState } from "react";
+import { forwardRef, useEffect } from "react";
 
-const MyCanvas = forwardRef(function MyCanvas({width, height, shapes, transparency, motion}, ref) {
+const MyCanvas = forwardRef(function MyCanvas({width, height, shapes, transparency}, ref) {
   console.table(shapes);
-  const velocityMin = -5.0;
-  const velocityMax = 5.0;
-  let velocity = 0;
 
   useEffect(() => {  //Draw the shapes
    if (ref.current) {
@@ -73,26 +70,15 @@ const MyCanvas = forwardRef(function MyCanvas({width, height, shapes, transparen
   };
 },[ref, shapes, transparency]);
 
-
-
-const MotionVelocity = () => {
-  const [velocity, setVelocity] = useState(0);
-  Math.abs(getRandomFloat(velocityMin, velocityMax));
-};
-
-function getRandomFloat(min, max) {
-  return Math.random() * (max - min) + min;
-}
-
   return (
-    <>
+    <div>
     <canvas
       ref={ref}
       width={width}
       height={height}
       style={{ border: "2px solid black", scale: "75%" }}
     />
-    </>
+    </div>
   );
 });
 
