@@ -1,13 +1,17 @@
-import { forwardRef, useEffect } from "react";
+import { forwardRef, useRef, useEffect, useState } from "react";
 
-const MyCanvas = forwardRef(function MyCanvas({width, height, shapes, transparency}, ref) {
+const MyCanvas = forwardRef(function MyCanvas({width, height, shapes, transparency, motion}, ref) {
   console.table(shapes);
+  const velocityMin = -5.0;
+  const velocityMax = 5.0;
+  let velocity = 0;
 
   useEffect(() => {  //Draw the shapes
    if (ref.current) {
     const ctx = ref.current.getContext("2d");
     //Clear to prevent cumulative transparency
     ctx.clearRect(0,0,width,height);
+
     let side = 0;
     shapes.forEach(el => {
       ctx.fillStyle = el.myColor;
@@ -69,24 +73,27 @@ const MyCanvas = forwardRef(function MyCanvas({width, height, shapes, transparen
   };
 },[ref, shapes, transparency]);
 
+
+
+const MotionVelocity = () => {
+  const [velocity, setVelocity] = useState(0);
+  Math.abs(getRandomFloat(velocityMin, velocityMax));
+};
+
+function getRandomFloat(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
   return (
     <>
     <canvas
       ref={ref}
-      width="800"
-      height="800"
-      style={{ border: "2px solid black" }}
+      width={width}
+      height={height}
+      style={{ border: "2px solid black", scale: "75%" }}
     />
     </>
   );
 });
 
-const MyOffscreenCanvas = forwardRef(function MyOffscreenCanvas({width, height, shapes}, ref) {
-  /* TODO
-  Investigate using offScreenCanvas to build 800x800 canvas, then display it in a visible 600x600 canvas.
-  Also good for optimizing redraws - https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API/Tutorial/Optimizing_canvas
-  */
-
-});
-
-export {MyCanvas, MyOffscreenCanvas}
+export {MyCanvas}

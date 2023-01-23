@@ -21,6 +21,11 @@ function App() {
     Triangle: true,
   });
 
+  const [motion, setMotion] = useState({
+    Forward: false,
+    Backward: false,
+  });
+
   const ref = useRef(null);
   const reload = () => window.location.reload(true);
 
@@ -105,6 +110,39 @@ function App() {
     };
   }
 
+  const toggleMotion = (e) => {
+    e.preventDefault();
+    const buttonName=e.target.name;
+    switch (buttonName) {
+      case "Forward":
+        if (motion.buttonName === true) {
+          setMotion({
+            ...motion, [buttonName]: false,
+          })
+        } else if (motion.ButtonName === false) {
+          setMotion({
+            ...motion, [buttonName]: true,
+            ...motion, Backward: false,
+          })
+        };
+      break;
+      case "Backward":
+          if (motion.buttonName === true) {
+            setMotion({
+              ...motion, [buttonName]: false,
+            })
+          } else if (motion.ButtonName === false) {
+            setMotion({
+              ...motion, [buttonName]: true,
+              ...motion, Forward: false,
+            })
+          };
+      break;
+      default:
+      break;
+    }
+  };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -132,10 +170,11 @@ function App() {
       </header>
       <div></div>
       <div>
-        <MyCanvas width="800" height="800" shapes={shapes} transparency={transparency} ref={ref} />
+        <MyCanvas width="800" height="800" shapes={shapes} transparency={transparency} motion={motion}  ref={ref} />
       </div>
+      <div>
       <span>
-        Toggle Transparency of shapes! {"  "}
+        Toggle Transparency! {"  "}
         <button name="Square"
           onClick={(e) => {toggleTransparency(e);
           }}
@@ -159,7 +198,24 @@ function App() {
           {" "}
           Triangles{" "}
         </button>
-      </span>
+        {"    "}Toggle Motion! {"  "}
+          <button name="Forward"
+            onClick={(e) => {toggleMotion(e);
+            }}
+          >
+            {" "}
+            Forward{" "}
+          </button>
+          {"  "}
+          <button name="Backward"
+            onClick={(e) => {toggleMotion(e);
+            }}
+          >
+            {" "}
+            Backward{" "}
+          </button>
+        </span>
+      </div>
     </div>
   );
 }
