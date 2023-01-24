@@ -1,11 +1,11 @@
 import { useRef, useState } from "react";
 import "./App.css";
 import { MyCanvas } from "./MyCanvas";
+import {Test} from "./test";
 
 function App() {
   const [total, setTotal] = useState(0); // number of shapes selected
   const [shapes, setShapes] = useState([]); // the array of shapes
-  const shapeArray = [];
   let x, y;
   let intervalID;
   const forward = useRef(false);
@@ -242,6 +242,7 @@ function App() {
           </button>
         </span>
       </div>
+      <Test />
     </div>
   );
 }
