@@ -5,6 +5,7 @@ import { MyCanvas } from "./MyCanvas";
 function App() {
   const [total, setTotal] = useState(0); // number of shapes selected
   const [shapes, setShapes] = useState([]); // the array of shapes
+  const shapeArray = [];
   let x, y;
   let intervalID;
   const forward = useRef(false);
@@ -142,21 +143,25 @@ function App() {
       dy = (-1 * Math.abs(getRandomFloat(-5, 5)));
     }
     console.log(`dx=`, dx, `dy=`, dy);
-    const newShapes = shapes.map((s, i) => {
-      let tempShape = {...s};
-      tempShape.x = s.x + dx;
-      tempShape.y = s.y + dy;
-      return tempShape;
-    });
 
     const updateShapes = () => {
+      const newShapes = shapes.map((s, i) => {
+        let tempShape = {...s};
+        tempShape.x = s.x + dx;
+        tempShape.y = s.y + dy;
+        //shapeArray.push(tempShape);
+        return tempShape;
+      });
       setShapes(newShapes);
+      // return (
+      //   <MyCanvas width="800" height="800" shapes={shapeArray} transparency={transparency} ref={ref} />
+      // )
     };
 
     if(forward.current === true || backward.current === true) {
       console.log(`1 intervalID=`, intervalID);
       if (!intervalID) {
-        intervalID = setInterval(() => {updateShapes()}, 1000);
+        intervalID = setInterval(() => updateShapes(), 1000);
       };
     } else {
       console.log(`clearInterval`);
