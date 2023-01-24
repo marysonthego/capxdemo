@@ -6,19 +6,15 @@ function App() {
   const [total, setTotal] = useState(0); // number of shapes selected
   const [shapes, setShapes] = useState([]); // the array of shapes
   let x, y;
-  let forward = false;
-  let backward = false;
+  let intervalID;
+  const forward = useRef(false);
+  const backward = useRef(false);
 
   // all shapes start out transparent
   const [transparency, setTransparency] = useState({
     Square: true,
     Circle: true,
     Triangle: true,
-  });
-
-  const [motion, setMotion] = useState({
-    Forward: false,
-    Backward: false,
   });
 
   const ref = useRef(null);
@@ -109,57 +105,63 @@ function App() {
   const toggleMotion = (e) => {
     e.preventDefault();
     const buttonName=e.target.name;
+    console.log(`buttonName=`,buttonName, `forward=`,forward.current, `backward=`,backward.current);
     switch (buttonName) {
       case "Forward":
-        if (motion[buttonName] === true) {
-          setMotion({
-            ...motion, [buttonName]: false,
-          })
-          forward = false;
-        } else if (motion[buttonName] === false) {
-          setMotion({
-            ...motion, [buttonName]: true,
-            ...motion, Backward: false,
-          })
-          forward = true;
-          backward = false;
+        if (forward.current === true) {
+          forward.current = false;
+        } else if (forward.current === false) {
+          forward.current = true;
+          backward.current = false;
         };
       break;
       case "Backward":
-          if (motion[buttonName] === true) {
-            setMotion({
-              ...motion, [buttonName]: false,
-            })
-            backward = false;
-          } else if (motion[buttonName] === false) {
-            setMotion({
-              ...motion, [buttonName]: true,
-              ...motion, Forward: false,
-            })
-            backward = true;
-            forward = false;
+          if (backward.current === true) {
+            backward.current = false;
+          } else if (backward.current === false) {
+            backward.current = true;
+            forward.current = false;
           };
       break;
       default:
       break;
-    }console.log(`forward=`,forward, `backward=`,backward);
-    let dx = 0;
-    let dy = 0;
-    if (forward === true){
+    }
+    console.log(`2 buttonName=`,buttonName, `forward=`,forward.current, `backward=`,backward.current);
+    if(forward.current === true || backward.current === true) {
+      Animate();
+    }
+  }
+
+  const Animate = () => {
+    let dx, dy;
+    if (forward.current === true){
       dx = Math.abs(getRandomFloat(-5, 5));
       dy = Math.abs(getRandomFloat(-5, 5));
-    } else if (backward === true) {
+    } else if (backward.current === true) {
       dx = (-1 * Math.abs(getRandomFloat(-5, 5)));
       dy = (-1 * Math.abs(getRandomFloat(-5, 5)));
     }
     console.log(`dx=`, dx, `dy=`, dy);
     const newShapes = shapes.map((s, i) => {
-        let tempShape = {...s};
-        tempShape.x = s.x + dx;
-        tempShape.y = s.y + dy;
-        return tempShape;
+      let tempShape = {...s};
+      tempShape.x = s.x + dx;
+      tempShape.y = s.y + dy;
+      return tempShape;
     });
-    setShapes(newShapes);
+
+    const updateShapes = () => {
+      setShapes(newShapes);
+    };
+
+    if(forward.current === true || backward.current === true) {
+      console.log(`1 intervalID=`, intervalID);
+      if (!intervalID) {
+        intervalID = setInterval(() => {updateShapes()}, 1000);
+      };
+    } else {
+      console.log(`clearInterval`);
+      clearInterval(intervalID);
+    };
   }
 
   return (
